@@ -9,6 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "splash": {
+        "image" : "./assets/images/working-hours.png",
+        "resizeMode": "contain", 
+        "backgroundColor": "#6700D6"
+      },
       "supportsTablet": true
     },
     "android": {
