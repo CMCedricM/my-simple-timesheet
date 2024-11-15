@@ -8,6 +8,7 @@ import {
   Button,
 } from "react-native";
 import CustomButton from "@/components/customButton";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   return (
@@ -28,7 +29,7 @@ export default function HomeScreen() {
             <CustomButton
               title="My Dashboard"
               onPress={() => {
-                console.log("hello");
+                router.push("/dashboard");
               }}
               textStyles={styles.buttonStyles}
               containerStyles={styles.buttonStyles}
@@ -40,7 +41,7 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     paddingVertical: 40,
     paddingHorizontal: 10,
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   buttonStyles: {
     fontSize: 18,
     backgroundColor: "#E4E185",
+    minWidth: "100%",
   },
   textContainter: {
     fontSize: 36,

@@ -44,6 +44,5 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: "center",
     minHeight: 62,
-    minWidth: "100%",
   },
 });
