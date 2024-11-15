@@ -1,29 +1,35 @@
-import { View, StyleSheet, SafeAreaView, Text } from "react-native";
+import { View, StyleSheet, SafeAreaView, Text, ScrollView } from "react-native";
 import CustomButton from "@/components/customButton";
+import GenericTable from "@/components/genericTable";
 import moment from "moment";
 
 const Dashboard = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.inputArea}>
-        <Text style={styles.clockArea}>{moment().format("h:mm a")}</Text>
-        <View style={styles.buttonArea}>
-          <CustomButton
-            title="Check In"
-            onPress={() => {
-              console.log("Hello");
-            }}
-            textStyles={styles.buttonStyles}
-            containerStyles={styles.buttonStyles}
-          ></CustomButton>
-          <CustomButton
-            title="Check out"
-            onPress={() => {
-              console.log("Hello");
-            }}
-            textStyles={styles.buttonStyles}
-            containerStyles={styles.buttonStyles}
-          ></CustomButton>
+        <View style={styles.container}>
+          <Text style={styles.clockArea}>{moment().format("h:mm a")}</Text>
+          <View style={styles.buttonArea}>
+            <CustomButton
+              title="Check In"
+              onPress={() => {
+                console.log("Hello");
+              }}
+              textStyles={styles.buttonStyles}
+              containerStyles={styles.buttonStyles}
+            ></CustomButton>
+            <CustomButton
+              title="Check out"
+              onPress={() => {
+                console.log("Hello");
+              }}
+              textStyles={styles.buttonStyles}
+              containerStyles={styles.buttonStyles}
+            ></CustomButton>
+          </View>
+        </View>
+        <View style={styles.tableArea}>
+          <GenericTable></GenericTable>
         </View>
       </SafeAreaView>
     </View>
@@ -46,7 +52,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 10,
-    justifyContent: "space-between",
+
+    justifyContent: "center",
+  },
+  tableArea: {
+    maxHeight: "50%",
+    marginBottom: 8,
+    padding: 4,
+    backgroundColor: "#80DB8D",
+    borderRadius: 10,
   },
   clockArea: {
     fontSize: 48,
