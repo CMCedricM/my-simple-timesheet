@@ -45,6 +45,18 @@ const testData: TableItem[] = [
     Action: "Checked In",
     Time: new Date().toISOString(),
   },
+  {
+    id: 2,
+    Name: "Abrazo",
+    Action: "Checked In",
+    Time: new Date().toISOString(),
+  },
+  {
+    id: 2,
+    Name: "Abrazo",
+    Action: "Checked In",
+    Time: new Date().toISOString(),
+  },
 ];
 
 interface TableItem {
