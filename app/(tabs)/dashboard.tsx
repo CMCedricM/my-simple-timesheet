@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CustomButton from "@/components/customButton";
-import GenericTable from "@/components/genericTable";
+import GenericTable, { TableItem } from "@/components/genericTable";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const Dashboard = () => {
   const [user, setUser] = useState<string>("");
+  const [clockData, setClockData] = useState<TableItem[]>([]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -24,6 +25,26 @@ const Dashboard = () => {
       }
     });
   }, []);
+
+  const checkInUser = async () => {
+    const newItem: TableItem = {
+      id: 0,
+      Name: user,
+      Action: "Clock-In",
+      Time: new Date().toISOString(),
+    };
+    setClockData([newItem, ...clockData]);
+  };
+
+  const checkOutUser = async () => {
+    const newItem: TableItem = {
+      id: clockData.length + 1,
+      Name: user,
+      Action: "Clock-Out",
+      Time: new Date().toISOString(),
+    };
+    setClockData([newItem, ...clockData]);
+  };
 
   return (
     <View style={styles.container}>
@@ -45,16 +66,16 @@ const Dashboard = () => {
             <View style={styles.buttonArea}>
               <CustomButton
                 title="Check In"
-                onPress={() => {
-                  console.log("Hello");
+                onPress={async () => {
+                  await checkInUser();
                 }}
                 textStyles={styles.buttonStyles}
                 containerStyles={styles.buttonStyles}
               ></CustomButton>
               <CustomButton
                 title="Check out"
-                onPress={() => {
-                  console.log("Hello");
+                onPress={async () => {
+                  await checkOutUser();
                 }}
                 textStyles={styles.buttonStyles}
                 containerStyles={styles.buttonStyles}
@@ -62,7 +83,7 @@ const Dashboard = () => {
             </View>
           </View>
           <View style={styles.tableArea}>
-            <GenericTable></GenericTable>
+            <GenericTable dataItems={clockData}></GenericTable>
           </View>
         </SafeAreaView>
       )}

@@ -59,14 +59,18 @@ const testData: TableItem[] = [
   },
 ];
 
-interface TableItem {
+export interface TableItem {
   id: number;
   Name: string;
   Action: string;
   Time: string;
 }
 
-const GenericTable = () => {
+interface GenericTableType {
+  dataItems: TableItem[];
+}
+
+const GenericTable = ({ dataItems }: GenericTableType) => {
   const renderItem = ({ item }: { item: TableItem }) => (
     <View style={styles.row}>
       <Text style={styles.cell}>{item.Name}</Text>
@@ -78,7 +82,7 @@ const GenericTable = () => {
   return (
     <View style={styles.wrapper}>
       <FlatList
-        data={testData}
+        data={dataItems}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={
