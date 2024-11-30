@@ -24,6 +24,7 @@ const Dashboard = () => {
         setUser(`${user_metadata.firstName} ${user_metadata.lastName}`);
       }
     });
+    
   }, []);
 
   const checkInUser = async () => {
