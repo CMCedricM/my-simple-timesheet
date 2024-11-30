@@ -18,15 +18,41 @@ const Dashboard = () => {
   const [clockData, setClockData] = useState<TableItem[]>([]);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        const { user_metadata } = user;
-        setUser(`${user_metadata.firstName} ${user_metadata.lastName}`);
+    const checkUserInformation = async () => {
+      const userInformation = await supabase.auth.getUser();
+      if (userInformation.data) {
+        const { user } = userInformation.data;
+        if (user) {
+          const { user_metadata } = user;
+          const userName = `${user_metadata.firstName} ${user_metadata.lastName}`;
+          const dataQuery = await supabase
+            .from("Users")
+            .select()
+            .eq("user_id", user.id);
+          setUser(userName);
+          console.log("here", dataQuery);
+          if (!dataQuery.data || dataQuery.data?.length == 0) {
+            await createUser(user.id, userName);
+          }
+        }
       }
-    });
-    
+    };
+
+    checkUserInformation();
   }, []);
 
+  const createUser = async (userId: string, userName: string) => {
+    const { error } = await supabase.from("Users").insert({
+      created_at: new Date().toISOString(),
+      user_id: userId,
+      user_name: userName,
+    });
+    if (error) console.log(error);
+    else {
+      console.log("created user");
+    }
+    console.log("called");
+  };
   const checkInUser = async () => {
     const newItem: TableItem = {
       id: 0,
