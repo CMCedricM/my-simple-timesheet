@@ -12,6 +12,7 @@ import GenericTable, { TableItem } from "@/components/genericTable";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { UserResponse } from "@supabase/supabase-js";
 
 const Dashboard = () => {
   const [user, setUser] = useState<string>("");
@@ -25,15 +26,7 @@ const Dashboard = () => {
         if (user) {
           const { user_metadata } = user;
           const userName = `${user_metadata.firstName} ${user_metadata.lastName}`;
-          const dataQuery = await supabase
-            .from("Users")
-            .select()
-            .eq("user_id", user.id);
           setUser(userName);
-          console.log("here", dataQuery);
-          if (!dataQuery.data || dataQuery.data?.length == 0) {
-            await createUser(user.id, userName);
-          }
         }
       }
     };
@@ -41,18 +34,6 @@ const Dashboard = () => {
     checkUserInformation();
   }, []);
 
-  const createUser = async (userId: string, userName: string) => {
-    const { error } = await supabase.from("Users").insert({
-      created_at: new Date().toISOString(),
-      user_id: userId,
-      user_name: userName,
-    });
-    if (error) console.log(error);
-    else {
-      console.log("created user");
-    }
-    console.log("called");
-  };
   const checkInUser = async () => {
     const newItem: TableItem = {
       id: 0,
@@ -78,8 +59,8 @@ const Dashboard = () => {
       {user && (
         <SafeAreaView style={styles.inputArea}>
           <View style={styles.container}>
-            <View style={styles.buttonArea}>
-              <Text>{`Hello ${user}`}</Text>
+            <View style={styles.helloTextArea}>
+              <Text style={styles.helloText}>{`Hello ${user}`}</Text>
               <TouchableOpacity
                 onPress={async () => await supabase.auth.signOut()}
               >
@@ -169,6 +150,18 @@ const styles = StyleSheet.create({
   logoutButtonStyle: {
     height: 15,
     width: 15,
+  },
+  helloTextArea: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  helloText: {
+    fontSize: 24,
+    color: "yellow",
   },
 });
 
