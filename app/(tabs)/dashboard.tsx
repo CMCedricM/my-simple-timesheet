@@ -12,10 +12,11 @@ import GenericTable, { TableItem } from "@/components/genericTable";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { UserResponse } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 
 const Dashboard = () => {
-  const [user, setUser] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
+  const [userName, setUserName] = useState<string>("");
   const [clockData, setClockData] = useState<TableItem[]>([]);
 
   useEffect(() => {
@@ -26,7 +27,8 @@ const Dashboard = () => {
         if (user) {
           const { user_metadata } = user;
           const userName = `${user_metadata.firstName} ${user_metadata.lastName}`;
-          setUser(userName);
+          setUser(user);
+          setUserName(userName);
         }
       }
     };
@@ -37,17 +39,26 @@ const Dashboard = () => {
   const checkInUser = async () => {
     const newItem: TableItem = {
       id: 0,
-      Name: user,
+      Name: userName,
       Action: "Clock-In",
       Time: new Date().toISOString(),
     };
+    const { error: err } = await supabase.from("Timesheet").insert({
+      clock_time: new Date().toISOString(),
+      action: "Clock-in",
+      user_id: user?.id,
+    });
+    if (err) {
+      console.log(err);
+      return;
+    }
     setClockData([newItem, ...clockData]);
   };
 
   const checkOutUser = async () => {
     const newItem: TableItem = {
       id: clockData.length + 1,
-      Name: user,
+      Name: userName,
       Action: "Clock-Out",
       Time: new Date().toISOString(),
     };
@@ -60,7 +71,7 @@ const Dashboard = () => {
         <SafeAreaView style={styles.inputArea}>
           <View style={styles.container}>
             <View style={styles.helloTextArea}>
-              <Text style={styles.helloText}>{`Hello ${user}`}</Text>
+              <Text style={styles.helloText}>{`Hello ${userName}`}</Text>
               <TouchableOpacity
                 onPress={async () => await supabase.auth.signOut()}
               >
