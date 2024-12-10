@@ -8,16 +8,39 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CustomButton from "@/components/customButton";
-import GenericTable, { TableItem } from "@/components/genericTable";
+import GenericTable, {
+  GenericTableType,
+  TableItem,
+} from "@/components/genericTable";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { User } from "@supabase/supabase-js";
+import {
+  PostgrestSingleResponse,
+  User,
+  QueryData,
+} from "@supabase/supabase-js";
+import { Tables } from "../types/database.types";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string>("");
+  const [userTimeSheet, setUserTimeSheet] = useState<GenericTableType>();
   const [clockData, setClockData] = useState<TableItem[]>([]);
+
+  const loadUserInfo = async () => {
+    const { data, error } = await supabase.from("Timesheet").select();
+    if (data) {
+      setUserTimeSheet({ dataItems: data });
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      loadUserInfo();
+    }
+  }, [user]);
 
   useEffect(() => {
     const checkUserInformation = async () => {
@@ -102,7 +125,7 @@ const Dashboard = () => {
             </View>
           </View>
           <View style={styles.tableArea}>
-            <GenericTable dataItems={clockData}></GenericTable>
+            <GenericTable dataItems={userTimeSheet}></GenericTable>
           </View>
         </SafeAreaView>
       )}
