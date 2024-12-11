@@ -26,7 +26,6 @@ const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string>("");
   const [userTimeSheet, setUserTimeSheet] = useState<GenericTableType>();
-  const [clockData, setClockData] = useState<TableItem[]>([]);
 
   const loadUserInfo = async () => {
     const { data, error } = await supabase.from("Timesheet").select();
@@ -60,12 +59,6 @@ const Dashboard = () => {
   }, []);
 
   const checkInUser = async () => {
-    const newItem: TableItem = {
-      id: 0,
-      Name: userName,
-      Action: "Clock-In",
-      Time: new Date().toISOString(),
-    };
     const { error: err } = await supabase.from("Timesheet").insert({
       clock_time: new Date().toISOString(),
       action: "Clock-in",
@@ -75,17 +68,18 @@ const Dashboard = () => {
       console.log(err);
       return;
     }
-    setClockData([newItem, ...clockData]);
   };
 
   const checkOutUser = async () => {
-    const newItem: TableItem = {
-      id: clockData.length + 1,
-      Name: userName,
-      Action: "Clock-Out",
-      Time: new Date().toISOString(),
-    };
-    setClockData([newItem, ...clockData]);
+    const { error: err } = await supabase.from("Timesheet").insert({
+      clock_time: new Date().toISOString(),
+      action: "Clock-out",
+      user_id: user?.id,
+    });
+    if (err) {
+      console.log(err);
+      return;
+    }
   };
 
   return (
@@ -125,7 +119,11 @@ const Dashboard = () => {
             </View>
           </View>
           <View style={styles.tableArea}>
-            <GenericTable dataItems={userTimeSheet}></GenericTable>
+            {userTimeSheet ? (
+              <GenericTable dataItems={userTimeSheet}></GenericTable>
+            ) : (
+              <Text>Please wait...</Text>
+            )}
           </View>
         </SafeAreaView>
       )}

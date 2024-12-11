@@ -1,3 +1,4 @@
+import { Tables } from "@/app/types/database.types";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -8,74 +9,17 @@ import {
   FlatList,
 } from "react-native";
 
-const testData: TableItem[] = [
-  {
-    id: 1,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    Name: "Abrazo",
-    Action: "Checked In",
-    Time: new Date().toISOString(),
-  },
-];
-
-export interface TableItem {
-  id: number;
-  Name: string;
-  Action: string;
-  Time: string;
-}
-
 interface GenericTableType {
-  dataItems: TableItem[];
+  dataItems: Tables<"Timesheet">[];
 }
 
 const GenericTable = ({ dataItems }: GenericTableType) => {
-  const renderItem = ({ item }: { item: TableItem }) => (
+  console.log(dataItems);
+  const renderItem = ({ item }: { item: Tables<"Timesheet"> }) => (
     <View style={styles.row}>
-      <Text style={styles.cell}>{item.Name}</Text>
-      <Text style={styles.cell}>{item.Action}</Text>
-      <Text style={styles.cell}>{item.Time}</Text>
+      <Text style={styles.cell}>{item.user_id}</Text>
+      <Text style={styles.cell}>{item.action}</Text>
+      <Text style={styles.cell}>{item.clock_time}</Text>
     </View>
   );
 
