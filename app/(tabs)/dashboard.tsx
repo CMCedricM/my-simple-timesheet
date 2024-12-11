@@ -8,10 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CustomButton from "@/components/customButton";
-import GenericTable, {
-  GenericTableType,
-  TableItem,
-} from "@/components/genericTable";
+import GenericTable, { GenericTableType } from "@/components/genericTable";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";

@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 
-interface GenericTableType {
+export interface GenericTableType {
   dataItems: Tables<"Timesheet">[];
 }
 
