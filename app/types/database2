@@ -34,41 +34,26 @@ export type Database = {
   }
   public: {
     Tables: {
-      employees: {
-        Row: {
-          id: number
-          name: string | null
-        }
-        Insert: {
-          id?: never
-          name?: string | null
-        }
-        Update: {
-          id?: never
-          name?: string | null
-        }
-        Relationships: []
-      }
       Timesheet: {
         Row: {
+          action: string
           clock_time: string
-          created_at: string | null
+          created_at: string
           id: number
-          status: Database["public"]["Enums"]["clock_status"] | null
           user_id: string
         }
         Insert: {
+          action: string
           clock_time: string
-          created_at?: string | null
+          created_at?: string
           id?: number
-          status?: Database["public"]["Enums"]["clock_status"] | null
           user_id?: string
         }
         Update: {
+          action?: string
           clock_time?: string
-          created_at?: string | null
+          created_at?: string
           id?: number
-          status?: Database["public"]["Enums"]["clock_status"] | null
           user_id?: string
         }
         Relationships: []
@@ -81,7 +66,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      clock_status: "Clocked-In" | "Clocked-Out"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never

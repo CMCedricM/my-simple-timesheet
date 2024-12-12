@@ -30,7 +30,7 @@ const TimeSheetTable = ({ dataItems, userName }: TimeSheetTableType) => {
           return (
             <View style={styles.row} key={index}>
               <Text>{userName}</Text>
-              <Text>{item.action}</Text>
+              <Text>{item.status}</Text>
               <Text>{item.clock_time.split("T")[0]}</Text>
               <Text>{moment(item.clock_time).format("hh:mm A")}</Text>
             </View>

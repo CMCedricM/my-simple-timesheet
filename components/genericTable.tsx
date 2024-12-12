@@ -18,7 +18,7 @@ const GenericTable = ({ dataItems }: GenericTableType) => {
   const renderItem = ({ item }: { item: Tables<"Timesheet"> }) => (
     <View style={styles.row}>
       <Text style={styles.cell}>{item.user_id}</Text>
-      <Text style={styles.cell}>{item.action}</Text>
+      <Text style={styles.cell}>{item.status}</Text>
       <Text style={styles.cell}>{item.clock_time}</Text>
     </View>
   );

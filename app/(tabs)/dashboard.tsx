@@ -35,7 +35,7 @@ const Dashboard = () => {
       .select()
       .order("clock_time", { ascending: false });
     if (data) {
-      if (data[0].action == "Clock-in") {
+      if (data[0].status == "Clocked-In") {
         setClockStatus(true);
       } else setClockStatus(false);
       setUserTimeSheet({ dataItems: data });
@@ -77,7 +77,7 @@ const Dashboard = () => {
     if (clockStatus) return;
     const { error: err } = await supabase.from("Timesheet").insert({
       clock_time: new Date().toISOString(),
-      action: "Clock-in",
+      status: "Clocked-In",
       user_id: user?.id,
     });
     if (err) {
@@ -91,7 +91,7 @@ const Dashboard = () => {
     if (!clockStatus) return;
     const { error: err } = await supabase.from("Timesheet").insert({
       clock_time: new Date().toISOString(),
-      action: "Clock-Out",
+      status: "Clocked-Out",
       user_id: user?.id,
     });
     if (err) {
@@ -138,7 +138,7 @@ const Dashboard = () => {
             </View>
             <View style={styles.helloTextArea}>
               <Text style={styles.helloText}>
-                You are currently {clockStatus ? "Clocked-in" : "Clocked-Out"}
+                You are currently {clockStatus ? "Clocked-In" : "Clocked-Out"}
               </Text>
             </View>
           </View>
