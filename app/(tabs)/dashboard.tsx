@@ -17,20 +17,38 @@ import {
   User,
   QueryData,
 } from "@supabase/supabase-js";
+import TimeSheetTable, { TimeSheetTableType } from "@/components/newTable";
 import { Tables } from "../types/database.types";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [clockStatus, setClockStatus] = useState<boolean>();
   const [userName, setUserName] = useState<string>("");
-  const [userTimeSheet, setUserTimeSheet] = useState<GenericTableType>();
+  const [userTimeSheet, setUserTimeSheet] = useState<TimeSheetTableType>();
+  const [currentTime, setCurrentTime] = useState<string>(
+    moment().format("h:mm a")
+  );
 
   const loadUserInfo = async () => {
-    const { data, error } = await supabase.from("Timesheet").select();
+    const { data, error } = await supabase
+      .from("Timesheet")
+      .select()
+      .order("clock_time", { ascending: false });
     if (data) {
+      if (data[0].action == "Clock-in") {
+        setClockStatus(true);
+      } else setClockStatus(false);
       setUserTimeSheet({ dataItems: data });
-      console.log(data);
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => setCurrentTime(moment().format("h:mm a")),
+      1000
+    );
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -56,6 +74,7 @@ const Dashboard = () => {
   }, []);
 
   const checkInUser = async () => {
+    if (clockStatus) return;
     const { error: err } = await supabase.from("Timesheet").insert({
       clock_time: new Date().toISOString(),
       action: "Clock-in",
@@ -65,18 +84,21 @@ const Dashboard = () => {
       console.log(err);
       return;
     }
+    await loadUserInfo();
   };
 
   const checkOutUser = async () => {
+    if (!clockStatus) return;
     const { error: err } = await supabase.from("Timesheet").insert({
       clock_time: new Date().toISOString(),
-      action: "Clock-out",
+      action: "Clock-Out",
       user_id: user?.id,
     });
     if (err) {
       console.log(err);
       return;
     }
+    await loadUserInfo();
   };
 
   return (
@@ -95,7 +117,7 @@ const Dashboard = () => {
                 ></Image>
               </TouchableOpacity>
             </View>
-            <Text style={styles.clockArea}>{moment().format("h:mm a")}</Text>
+            <Text style={styles.clockArea}>{currentTime}</Text>
             <View style={styles.buttonArea}>
               <CustomButton
                 title="Check In"
@@ -114,10 +136,18 @@ const Dashboard = () => {
                 containerStyles={styles.buttonStyles}
               ></CustomButton>
             </View>
+            <View style={styles.helloTextArea}>
+              <Text style={styles.helloText}>
+                You are currently {clockStatus ? "Clocked-in" : "Clocked-Out"}
+              </Text>
+            </View>
           </View>
           <View style={styles.tableArea}>
             {userTimeSheet ? (
-              <GenericTable dataItems={userTimeSheet}></GenericTable>
+              <TimeSheetTable
+                dataItems={userTimeSheet.dataItems}
+                userName={userName}
+              />
             ) : (
               <Text>Please wait...</Text>
             )}
