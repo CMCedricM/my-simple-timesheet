@@ -1,8 +1,6 @@
-# Welcome to your Expo app 👋
+## Summary
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Description
 
 This project is my first step into mobile development, where I built a basic timesheet application. Users can securely log in and out using Supabase Auth. The app synchronizes and stores clock-in and clock-out history in a Supabase PostgreSQL database, providing a simple yet effective way to manage time tracking.
 
